@@ -7,7 +7,7 @@ const moment = require('moment')
 const firebaseRef = new Firebase('https://room-ease.firebaseio.com/');
 
 return firebaseRef.set({
-	room: [
+	rooms: [
 		{
 			roomId: 0,
 			members: [
