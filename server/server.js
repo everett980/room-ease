@@ -1,3 +1,4 @@
+<<<<<<< HEAD:server/server.js
 'use strict'
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -91,7 +92,3 @@ function interpolateTasks() {
 // });
 
 
-
-app.listen(PORT, () => {
-    console.log(`listening diligently on port ${PORT}`)
-})
