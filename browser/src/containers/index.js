@@ -6,4 +6,6 @@ export About from './About/About';
 export Login from './Login/Login';
 export LoginSuccess from './LoginSuccess/LoginSuccess';
 export Survey from './Survey/Survey';
+export Overview from './Overview/Overview';
 export NotFound from './NotFound/NotFound';
+export Signup from './Signup/Signup';
