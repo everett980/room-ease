@@ -21,6 +21,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(routes)
 
+interpolateTasks();
+
 function interpolateTasks() {
     const options = {
         uri: 'https://room-ease.firebaseio.com/rooms.json'
@@ -55,6 +57,20 @@ function interpolateTasks() {
                     }
                 })
                 rooms[room.roomId].thisMonthsTasks = generatedTaskList;
+                room.members.forEach( member => {
+                	const transfersFrom = [];
+                	let nessieIdToTransferTo;
+                	if(!member.isAdmin){
+                		transferTo.push(
+                			{
+                				nessieId: member.nessieId,
+                				amount: member.rentOwedThisMonth
+                			}
+                		)
+                	} else {
+                		nessieIdToTransferTo = member.nessieId;
+                	}
+                })
             }
         })
         return firebaseRef.update({ rooms })
@@ -63,9 +79,9 @@ function interpolateTasks() {
         console.error(err)
     })
 }
-const job = schedule.scheduleJob('0 0 * * * *', function() {
-	interpolateTasks();
-});
+// const job = schedule.scheduleJob('0 0 * * * *', function() {
+// 	interpolateTasks();
+// });
 
 
 
