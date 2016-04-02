@@ -6,7 +6,7 @@ import Firebase from 'firebase';
 const firebaseRef = new Firebase('https://room-ease.firebaseio.com/');
 
 export default class Signup extends Component {
-	/* loginPrompt() {
+	loginPrompt() {
 		firebaseRef.authWithOAuthPopup("google", function(error, authData) {
 			if (error) {
 				console.log('Login Failed!', error);
@@ -14,11 +14,12 @@ export default class Signup extends Component {
 				console.log('Authenticated successfully with payload:', authData);
 			}
 		});
-	} */
+	}
 	render() {
 		return (
 				<div>
 					<h1>Sign up</h1>
+					<button onClick={this.loginPrompt}>Sign In</button>
 				</div>
 			   );
 	}
