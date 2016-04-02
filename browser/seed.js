@@ -3,6 +3,7 @@
 const Firebase = require('firebase');
 const moment = require('moment');
 const rp = require('request-promise')
+const Promise = require('bluebird')
 
 
 const firebaseRef = new Firebase('https://room-ease.firebaseio.com/');
@@ -116,25 +117,33 @@ let user1NessieId;
 let user2NessieId;
 let user0Room1NessieId;
 
-rp(user0Options)
+// rp(user0Options)
+Promise.resolve(user0Options)
 .then( res => {
-	const createdUser0 = JSON.parse(res);
-	user0NessieId = createdUser0.objectCreated._id
-	return rp(user1Options)
+	// const createdUser0 = JSON.parse(res);
+	// user0NessieId = createdUser0.objectCreated._id
+	user0NessieId = 'abc123'
+	// return rp(user1Options)
+	return user0NessieId;
 })
 .then( res => {
-	const createdUser1 = JSON.parse(res);
-	user1NessieId = createdUser1.objectCreated._id
-	return rp(user2Options)
+	// const createdUser1 = JSON.parse(res);
+	// user1NessieId = createdUser1.objectCreated._id
+	user1NessieId = '321cba'
+	// return rp(user2Options)
+	return user1NessieId;
 })
 .then( res => {
-	const createdUser2 = JSON.parse(res);
-	user2NessieId = createdUser2.objectCreated._id
-	return rp(user0Room1Options)
+	// const createdUser2 = JSON.parse(res);
+	// user2NessieId = createdUser2.objectCreated._id
+	user2NessieId = 'blahblah'
+	// return rp(user0Room1Options)
+	return user2NessieId;
 })
 .then( res => {
-	const createdUser0Room1 = JSON.parse(res);
-	user0Room1NessieId = createdUser0Room1.objectCreated._id
+	// const createdUser0Room1 = JSON.parse(res);
+	// user0Room1NessieId = createdUser0Room1.objectCreated._id
+	user0Room1NessieId = 'pleasework.jpg';
 	return insertIntoFirebase()
 })
 .then( () => {
@@ -163,7 +172,7 @@ function insertIntoFirebase(){
 				    },
 				    {
 					    id: 1,
-					    email: 'yustynn0@gmail.com',
+					    email: 'yustynn@gmail.com',
 					    profilePicture: 'https://www.fillmurray.com/140/100',
 					    name: 'Yustynn Panicker',
 					    baseRentOwed: 1000,
@@ -255,7 +264,8 @@ function insertIntoFirebase(){
 					    name: 'Charlie Chaplin',
 					    baseRentOwed: 500,
 					    rentOwedThisMonth: 500,
-					    isAdmin: true
+					    isAdmin: true,
+					    nessieId: user0Room1NessieId
 					},
 					{
 						id: 1,
