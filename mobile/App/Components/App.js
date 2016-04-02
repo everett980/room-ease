@@ -10,8 +10,6 @@ import React, {
 
 import { Provider } from 'react-redux';
 
-import Header from './Header';
-import InputLabel from './Common/InputLabel';
 import SignIn from './SignIn';
 
 import store from '../Data';
