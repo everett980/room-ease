@@ -15,6 +15,8 @@ import SignIn from './SignIn';
 import store from '../Data';
 import sharedStyles from '../Styles';
 
+const configureScene = (route, routeStack) => Navigator.SceneConfigs.HorizontalSwipeJump;
+
 const renderScene = (scene, navigator) => {
   const { component } = scene;
   const rendered =  (component) ? createElement(component, { navigator }) : '';
@@ -30,6 +32,7 @@ const renderScene = (scene, navigator) => {
 
 const App = () => (
   <Navigator
+    configureScene={ configureScene }
     initialRoute={{ component: SignIn }}
     renderScene={ renderScene }
   />

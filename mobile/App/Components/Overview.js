@@ -9,6 +9,9 @@ import React, {
 import { connect } from 'react-redux';
 import Firebase from 'firebase';
 
+import MenuContents from './Menu';
+import Header from './Header';
+
 import sharedStyles from '../Styles';
 
 const mapStateToProp = (state) => ({
@@ -18,23 +21,22 @@ const mapStateToProp = (state) => ({
 
 class Overview extends Component {
   render() {
-    const { name, profilePicture } = this.props;
-    console.log(profilePicture)
+    const { name, profilePicture, navigator } = this.props;
     return (
-      <View>
-        <Text>Wazzup, { name.split(' ')[0 ] }</Text>
+      <View style={ styles.temp }>
+        <Header title='Yestynn / Notynn / Manytynn' />
+        <MenuContents navigator={navigator} />
         <Image style={ styles.profilePicture } source={{ uri: profilePicture }} />
+        <Text>Wazzup, { name.split(' ')[0 ] }</Text>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  profilePicture: {
-    alignSelf: 'center',
-    borderRadius: 50,
-    height: 100,
-    width: 100,
+  temp: {
+    alignItems: 'stretch',
+    flex: 1,
   }
 })
 
