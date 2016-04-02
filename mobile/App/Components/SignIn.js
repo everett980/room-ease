@@ -5,6 +5,7 @@ import React, {
   TextInput,
   View,
 } from 'react-native';
+
 import Firebase from 'firebase';
 
 import IconHeader from './IconHeader';
@@ -14,7 +15,7 @@ import Overview from './Overview';
 import sharedStyles from '../Styles';
 import store from '../Data';
 
-let email = '';
+let email = 'yustynn@gmail.com';
 
 const ref = new Firebase(`https://room-ease.firebaseio.com/`);
 
