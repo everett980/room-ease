@@ -55,8 +55,6 @@ function interpolateTasks() {
                     }
                 })
                 rooms[room.roomId].thisMonthsTasks = generatedTaskList;
-            } else {
-                console.log(today, dueDate)
             }
         })
         return firebaseRef.update({ rooms })
