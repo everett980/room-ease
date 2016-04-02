@@ -40,7 +40,7 @@ export default (store) => {
     <Route path="/" component={App}>
       { /* Home (main) route */ }
       <IndexRoute component={Signup}/>
-      <Route path="overview" component={Overview}/>
+      <Route path="/overview" component={Overview}/>
 
 
       { /* Catch all route */ }
