@@ -25,7 +25,7 @@ class Overview extends Component {
       <View style={ styles.temp }>
         <Header title='Yestynn / Notynn / Manytynn' />
         <Image style={ styles.profilePicture } source={{ uri: profilePicture }} />
-        <Text>Wazzup, { name.split(' ')[0 ] }</Text>
+        <Text>Wazzup, { name.split(' ')[0] }</Text>
       </View>
     )
   }

@@ -11,6 +11,7 @@
     "react-native": "^0.22.2",
     "react-native-side-menu": "^0.18.0",
     "react-redux": "^4.4.1",
+    "reactfire": "^0.6.0",
     "redux": "^3.3.1"
   }
 }

@@ -28,6 +28,12 @@ export default StyleSheet.create({
   centerSelf: {
     alignSelf: 'center',
   },
+  column: {
+    flexDirection: 'column',
+  },
+  container: {
+    padding: 20,
+  },
   fullWidth: {
     flex: 1,
   },
@@ -48,6 +54,9 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
   greenButton: createButtonStyle(GREEN),
+  row: {
+    flexDirection: 'row',
+  },
   test: {
     borderColor: 'black',
     borderWidth: 5,

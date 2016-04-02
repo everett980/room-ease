@@ -24,12 +24,14 @@ const renderScene = (scene, navigator) => {
 
   if (showMenu) rendered = (
     <Menu navigator={ navigator }>
-      { rendered }
+      <View style={ styles.background }>
+        { rendered }
+      </View>
     </Menu>
   );
 
   return (
-    <Provider store={store}>
+    <Provider store={ store }>
       <View style={ [sharedStyles.fullWidth, styles.container] }>
         { rendered }
       </View>
@@ -46,6 +48,9 @@ const App = () => (
 )
 
 const styles = StyleSheet.create({
+  background: {
+    backgroundColor: 'white',
+  },
   container: {
     paddingTop: 20,
   },

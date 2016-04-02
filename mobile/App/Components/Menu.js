@@ -8,9 +8,10 @@ import React, {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { store } from 'redux';
+import store from '../Data';
 import SideMenu from 'react-native-side-menu';
 
+import Tasks from './Tasks';
 import Overview from './Overview';
 
 import sharedStyles from '../Styles';
@@ -31,11 +32,13 @@ const go = (navigator, location) => () => {
   const locationToComponent = {
     'Home': Overview,
     'My Trades': Overview,
-    'My Tasks': Overview,
-    'Communal Tasks': Overview,
+    'My Tasks': Tasks,
+    'Communal Trades': Overview,
     'Make New Trade': Overview,
   }
   const component = locationToComponent[location];
+
+  store.dispatch({ type: 'TOGGLE_MENU' });
 
   navigator.push({ component });
 }
@@ -52,13 +55,18 @@ let MenuContents = ({ name, navigator, profilePicture }) => {
 
   const menuItems = locations.map( (location) => (
       <View key={ location }>
-        <Text onPress={ go(navigator, location) } style={ styles.menuItem }>{ location.toUpperCase() }</Text>
+        <Text
+          onPress={ go(navigator, location) }
+          style={ styles.menuItem }
+        >
+          { location.toUpperCase() }
+        </Text>
         <View style={ styles.divider } />
       </View>
   ));
 
   return (
-    <View style={ [styles.container, sharedStyles.test]} >
+    <View style={ [styles.container,]} >
       <View style={ styles.profileInfoContainer }>
         <Image
           source={{ uri: profilePicture }}
@@ -81,18 +89,19 @@ MenuContents = connect(mapMenuContentStateToProps)(MenuContents);
 
 const mapMenuStateToProps = (state) => ({ isMenuOpen: state.isMenuOpen });
 
-let Menu = ({ navigator, children, isMenuOpen }) => {
+const Menu = ({ navigator, children, isMenuOpen }) => {
+  const menu = <MenuContents navigator={navigator} />
   return (
     <SideMenu
       isOpen={ isMenuOpen }
-      menu={ createElement(MenuContents, { navigator }, null) }
+      menu={ menu }
     >
       { children }
     </SideMenu>
   )
 }
 
-Menu = connect(mapMenuStateToProps)(Menu);
+export default connect(mapMenuStateToProps)(Menu);
 
 const styles = StyleSheet.create({
   container: {
@@ -135,5 +144,3 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 })
-
-export default Menu;
