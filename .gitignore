@@ -1,0 +1,9 @@
+browser/.idea/
+browser/node_modules/
+browser/dist/
+browser/*.iml
+browser/webpack-assets.json
+browser/webpack-stats.json
+browser/npm-debug.log
+**.swp
+**~
