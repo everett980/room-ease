@@ -10,6 +10,7 @@ import React, {
 
 import { Provider } from 'react-redux';
 
+import Menu from './Menu';
 import SignIn from './SignIn';
 
 import store from '../Data';
@@ -18,12 +19,18 @@ import sharedStyles from '../Styles';
 const configureScene = (route, routeStack) => Navigator.SceneConfigs.HorizontalSwipeJump;
 
 const renderScene = (scene, navigator) => {
-  const { component } = scene;
-  const rendered =  (component) ? createElement(component, { navigator }) : '';
+  const { component, showMenu = true } = scene;
+  let rendered =  (component) ? createElement(component, { navigator }) : '';
+
+  if (showMenu) rendered = (
+    <Menu navigator={ navigator }>
+      { rendered }
+    </Menu>
+  );
 
   return (
     <Provider store={store}>
-      <View style={ [sharedStyles.fullWidth, sharedStyles.center] }>
+      <View style={ [sharedStyles.fullWidth, styles.container] }>
         { rendered }
       </View>
     </Provider>
@@ -33,7 +40,7 @@ const renderScene = (scene, navigator) => {
 const App = () => (
   <Navigator
     configureScene={ configureScene }
-    initialRoute={{ component: SignIn }}
+    initialRoute={{ component: SignIn, showMenu: false }}
     renderScene={ renderScene }
   />
 )

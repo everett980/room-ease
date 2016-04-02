@@ -4,10 +4,12 @@ import React, {
   StyleSheet,
   Text,
   View,
+  createElement
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import MenuWrapper from 'react-native-side-menu';
+import { store } from 'redux';
+import SideMenu from 'react-native-side-menu';
 
 import Overview from './Overview';
 
@@ -56,10 +58,12 @@ let MenuContents = ({ name, navigator, profilePicture }) => {
   ));
 
   return (
-    <View style={ styles.container } >
+    <View style={ [styles.container, sharedStyles.test]} >
       <View style={ styles.profileInfoContainer }>
-        <Image style={ styles.profilePicture }source={{ uri: profilePicture }} />
-        <Text style={ styles.name }>{ name }</Text>
+        <Image
+          source={{ uri: profilePicture }}
+          style={ styles.profilePicture } />
+        <Text style={ styles.name } >{ name }</Text>
       </View>
       <View style={ styles.menuItemsContainer } >
         { menuItems }
@@ -68,13 +72,27 @@ let MenuContents = ({ name, navigator, profilePicture }) => {
   );
 }
 
-const mapStateToProps = (state) => ({
+const mapMenuContentStateToProps = (state) => ({
   name: state.user.name,
   profilePicture: state.user.profilePicture,
 });
 
-MenuContents = connect(mapStateToProps, null)(MenuContents);
+MenuContents = connect(mapMenuContentStateToProps)(MenuContents);
 
+const mapMenuStateToProps = (state) => ({ isMenuOpen: state.isMenuOpen });
+
+let Menu = ({ navigator, children, isMenuOpen }) => {
+  return (
+    <SideMenu
+      isOpen={ isMenuOpen }
+      menu={ createElement(MenuContents, { navigator }, null) }
+    >
+      { children }
+    </SideMenu>
+  )
+}
+
+Menu = connect(mapMenuStateToProps)(Menu);
 
 const styles = StyleSheet.create({
   container: {
@@ -103,6 +121,7 @@ const styles = StyleSheet.create({
   },
   menuItemsContainer: {
     backgroundColor: BLUE,
+    height: 1000, // so hacky so naughty
   },
   profilePicture: {
     borderRadius: 25,
@@ -117,4 +136,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default MenuContents;
+export default Menu;

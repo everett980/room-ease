@@ -8,5 +8,8 @@ export default (state = initialState, action) => {
     case 'SET_USER': {
       return { ...state, user: action.user }
     }
+    case 'TOGGLE_MENU': {
+      return { ...state, isMenuOpen: !state.isMenuOpen }
+    }
   };
 }

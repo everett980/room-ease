@@ -9,7 +9,6 @@ import React, {
 import { connect } from 'react-redux';
 import Firebase from 'firebase';
 
-import MenuContents from './Menu';
 import Header from './Header';
 
 import sharedStyles from '../Styles';
@@ -25,7 +24,6 @@ class Overview extends Component {
     return (
       <View style={ styles.temp }>
         <Header title='Yestynn / Notynn / Manytynn' />
-        <MenuContents navigator={navigator} />
         <Image style={ styles.profilePicture } source={{ uri: profilePicture }} />
         <Text>Wazzup, { name.split(' ')[0 ] }</Text>
       </View>
