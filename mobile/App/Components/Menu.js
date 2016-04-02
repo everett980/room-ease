@@ -7,7 +7,8 @@ import React, {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import Firebase from 'firebase';
+
+import MenuWrapper from 'react-native-side-menu';
 
 import sharedStyles from '../Styles';
 
@@ -15,6 +16,35 @@ const mapStateToProp = (state) => ({
   name: state.user.name,
   profilePicture: state.user.profilePicture
 })
+
+const go = (navigator, location) => {
+  const locationToComponent = {
+
+  }
+  navigator.push(locationToComponent[location]);
+}
+
+const locations = [
+  'Home',
+  'My Trades',
+  'My Tasks',
+  'Communal Tasks',
+  'Make New Trade'
+].map( (location) => location.toUpperCase() );
+
+const MenuContents = ({ navigator }) => {
+  const menuItems = locations.map( (location) => (
+    <View>
+      <Text>{ location }</Text>
+    </View>
+  ))
+  return (
+    <View>
+      { menuItems }
+    </View>
+  );
+}
+
 
 class Overview extends Component {
   render() {
