@@ -12,3 +12,6 @@ export MiniInfoBar from './MiniInfoBar/MiniInfoBar';
 export SurveyForm from './SurveyForm/SurveyForm';
 export WidgetForm from './WidgetForm/WidgetForm';
 export Task from './Task/Task';
+export TaskDeleter from './TaskDeleter/TaskDeleter';
+export Purchase from './Purchase/Purchase';
+export Trade from './Trade/Trade';
