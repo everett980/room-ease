@@ -7,4 +7,5 @@ export const LIGHT_BLUE = '#63CDFF';
 export const LIGHT_GREY = '#DADADA';
 export const LIGHTER_GREY = '#F7F7F7';
 export const ORANGE = '#FBA210';
+export const RED = '#FF6275';
 export const SLIGHTLY_DARKER_BLUE = '#19B1F7';

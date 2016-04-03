@@ -19,8 +19,8 @@ import sharedStyles from '../Styles';
 const configureScene = (route, routeStack) => Navigator.SceneConfigs.HorizontalSwipeJump;
 
 const renderScene = (scene, navigator) => {
-  const { component, showMenu = true } = scene;
-  let rendered =  (component) ? createElement(component, { navigator }) : '';
+  const { component, showMenu = true, props = {} } = scene;
+  let rendered =  (component) ? createElement(component, { navigator, ...props }) : '';
 
   if (showMenu) rendered = (
     <Menu navigator={ navigator }>

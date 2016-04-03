@@ -19,66 +19,118 @@ import {
   BLUE,
   DARK_BLUE,
   DARK_GREY,
+  GREEN,
   GREY,
   LIGHT_BLUE,
   LIGHTER_GREY,
+  RED,
 } from '../Styles/colors';
+
+const TasksList = ({ tasks, prepend }) => {
+  console.log('tasks', tasks)
+  tasks = tasks.map( (task, idx) => (
+    <View key={ idx } style={ sharedStyles.row }>
+      <View>
+        <Text>{ prepend }  </Text>
+      </View>
+      <View style={ sharedStyles.column }>
+        <Text>{ task.name }</Text>
+        <Text>{ moment(task.endDate).format('M/D') }</Text>
+      </View>
+    </View>
+  ))
+
+  return (
+    <View style={ [sharedStyles.container] }>
+      { tasks }
+    </View>
+  )
+}
+
+const OfferDetails = ({ tasksFor, tasksTaken, cash, profilePicture, title }) => (
+  <View>
+    <View style={ [sharedStyles.container, sharedStyles.row, styles.bgAlt] }>
+      <Image
+        source={{ uri: profilePicture }}
+        style={ styles.profilePicture }
+      />
+    <Text style={ styles.title }>{ title.toUpperCase() }</Text>
+    </View>
+    <View style={ sharedStyles.container }>
+      <Text>{ `${(cash >= 0 ? '+' : '-')} $${ Math.abs(cash) }` }</Text>
+    </View>
+    <TasksList tasks={ tasksFor } prepend='+' />
+    <TasksList tasks={ tasksTaken } prepend='-' />
+  </View>
+)
 
 const Trade = React.createClass({
   mixins: [ReactFireMixin],
 
   componentWillMount: function() {
-    const { roomId } = this.props;
+    const { roomId, tradeId } = this.props;
+    const tasksRef = new Firebase(`https://room-ease.firebaseio.com/rooms/${roomId}/thisMonthsTasks`);
+    const tradeRef = new Firebase(`https://room-ease.firebaseio.com/rooms/${roomId}/proposedTrades/${tradeId}`)
 
-    const ref = new Firebase(`https://room-ease.firebaseio.com/rooms/${roomId}/proposedTrades`);
-    this.bindAsArray(ref, 'trades');
+    this.bindAsArray(tasksRef, 'tasks');
+    this.bindAsObject(tradeRef, 'trade');
+
   },
 
   render: function() {
-    const { members, userId } = this.props;
+    const { members, user } = this.props;
+    const { trade } = this.state;
+
+    const initiator = members[trade.initiator];
+    initiator.firstName = initiator.name.split(' ')[0]
 
     const tasks = this.state.tasks.filter( (task) => task );
 
-    const trades = this.state.trades
-    .filter( (trade) => trade )
-    .filter( (trade) => trade.recipient === userId )
-    .map( (trade, idx) => {
-      const initiator = members[trade.initiator];
+    trade.tasksForInitator = trade.tasksForInitiator
+    .filter( (task) => task )
+    .map( (id) => (
+      tasks.find( (task) => task.id === id )
+    ) );
 
-      return (
-        <View key={ idx } style={ [sharedStyles.container, sharedStyles.longHack] }>
-          <View style={ styles.card }>
-            <View style={ sharedStyles.row }>
-              <Image
-                source={{ uri: initiator.profilePicture }}
-                style={ styles.profilePicture }
-              />
-              <View style={ [sharedStyles.column , styles.namesContainer] }>
-                <View style={ [sharedStyles.row] }>
-                  <Text style={ [styles.header, styles.push] }>INITIATOR</Text>
-                  <Text style={ styles.name }>{ initiator.name.toUpperCase() }</Text>
-                </View>
-                <View style={ [sharedStyles.row] }>
-                  <Text style={ styles.header }>RECIPIENT</Text>
-                  <Text style={ styles.name }>YOU</Text>
-                </View>
-              </View>
-            </View>
-            <TouchableHighlight
-              style={ styles.button }
-              underlayColor={ LIGHT_BLUE }
-            >
-              <Text style={ styles.btnText }>VIEW OFFER</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-      )
-    })
+    trade.tasksForRecipient = trade.tasksForRecipient
+    .filter( (task) => task )
+    .map( (id) => (
+      tasks.find( (task) => task.id === id )
+    ) );
+
+    const { tasksForRecipient, tasksForInitator, rentIncreaseForInitiator } = trade;
+
+    const title = `${initiator.firstName}'s Trade Offer`;
 
     return (
-      <View>
-        <Header title='My Trades' />
-        { trades }
+      <View style={ sharedStyles.longHack }>
+        <Header title={ title } />
+        <OfferDetails
+          cash={ rentIncreaseForInitiator }
+          profilePicture={ user.profilePicture }
+          tasksFor={ tasksForRecipient }
+          tasksTaken={ tasksForInitator }
+          title='You get'
+        />
+        <OfferDetails
+          cash={ -rentIncreaseForInitiator }
+          profilePicture={ user.profilePicture }
+          tasksFor={ tasksForInitator }
+          tasksTaken={ tasksForRecipient }
+          title={ `${initiator.firstName} gets` }
+        />
+        <View style={ sharedStyles.row }>
+          <View style={ [sharedStyles.full, sharedStyles.row] }>
+            <Text
+              style={ [styles.button, styles.red ]}>
+              NO
+            </Text>
+            <Text
+              style={ [styles.button, styles.green ]} >
+              YES
+            </Text>
+          </View>
+        </View>
       </View>
     )
   },
@@ -87,46 +139,36 @@ const Trade = React.createClass({
 const mapStateToProps = (state) => ({
   members: state.members,
   roomId: state.roomId,
-  userId: state.user.id,
+  user: state.user,
 })
 
-export default connect(mapStateToProps)(Trades);
+export default connect(mapStateToProps)(Trade);
 
 const styles = StyleSheet.create({
-  btnText: {
-    alignSelf: 'center',
-    color: 'white',
-    fontSize: 20,
-    letterSpacing: 2,
+  bgAlt: {
+    alignItems: 'center',
+    backgroundColor: LIGHTER_GREY,
+    paddingTop: 10,
+    paddingBottom: 5,
   },
   button: {
-    backgroundColor: LIGHT_BLUE,
-    flex: 1,
-    padding: 10,
   },
-  card: {
-    backgroundColor: LIGHTER_GREY,
-    flexDirection: 'column',
-  },
-  header: {
-    fontSize: 16,
-    letterSpacing: 1,
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: '200',
-    letterSpacing: 1,
-  },
-  namesContainer: {
-    alignSelf: 'center',
+  green: {
+    backgroundColor: GREEN,
   },
   profilePicture: {
-    height: 70,
-    width: 70,
+    borderRadius: 25,
+    height: 50,
+    marginBottom: 10,
+    width: 50,
   },
-  push: {
-    paddingRight: 20,
+  red: {
+    backgroundColor: RED,
+  },
+  title: {
+    color: GREY,
+    fontSize: 18,
+    letterSpacing: 2.5,
+    paddingLeft: 20,
   }
 });
