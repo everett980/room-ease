@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import ReactFireMixin from 'reactfire';
 
 import Header from './Header';
+import Trade from './Trade';
 
 import sharedStyles from '../Styles';
 import {
@@ -27,6 +28,10 @@ const Trades = React.createClass({
 
     const ref = new Firebase(`https://room-ease.firebaseio.com/rooms/${roomId}/proposedTrades`);
     this.bindAsArray(ref, 'trades');
+  },
+
+  go: function(tradeId) {
+    return () => { this.props.navigator.push({ component: Trade, props: { tradeId } }) };
   },
 
   render: function() {
@@ -57,6 +62,7 @@ const Trades = React.createClass({
               </View>
             </View>
             <TouchableHighlight
+              onPress={ this.go(trade.id) }
               style={ styles.button }
               underlayColor={ LIGHT_BLUE }
             >
