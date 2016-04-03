@@ -148,6 +148,7 @@ const functions = {
     	this.getTradeProposals(roomIndex)
     	.then( proposals => {
     		const proposalData = {
+                id: proposals.length
     			roomId: roomIndex,
     			rentIncreaseForInitiator: rentIncreaseForInitiator || 0,
     			initiator: initiatorId,
