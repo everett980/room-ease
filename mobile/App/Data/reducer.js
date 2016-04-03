@@ -6,7 +6,7 @@ export default (state = initialState, action) => {
       return { ...state, roomId: action.roomId }
     }
     case 'SET_MEMBERS': {
-      return { ...state, members: action.members }
+      return { ...state, members: Array.from(action.members) }
     }
     case 'SET_RENT_DUE_DATE': {
       return { ...state, rentDueDate: action.rentDueDate }

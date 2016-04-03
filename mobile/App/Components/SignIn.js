@@ -10,11 +10,11 @@ import Firebase from 'firebase';
 
 import IconHeader from './IconHeader';
 import InputLabel from './Common/InputLabel';
-import Overview from './Overview';
+import ProposeTrade from './ProposeTrade';
 import Tasks from './Tasks';
 
 import sharedStyles from '../Styles';
-import { BLUE } from '../Styles/colors';
+import { BLUE, LIGHT_GREY } from '../Styles/colors';
 import store from '../Data';
 
 let email = 'yustynn@gmail.com';
@@ -40,17 +40,13 @@ const submitEmail = (navigator) => () => {
     console.log(1, email);
     const user = room.members.find( (member) => member.email === email );
 
-    const members = room.members.reduce( (members, member) => {
-      members[member.id] = member;
-      return members;
-    }, {});
     store.dispatch({
       type: 'SET_USER',
       user,
     });
     store.dispatch({
       type: 'SET_MEMBERS',
-      members: members,
+      members: room.members,
     });
     store.dispatch({
       type: 'SET_RENT_DUE_DATE',
@@ -59,8 +55,8 @@ const submitEmail = (navigator) => () => {
   })
   .then( () => {
     console.dir( store.getState() );
-    console.log('Going to Tasks');
-    navigator.push({ component: Tasks, showMenu: true });
+    console.log('Going to ProposeTrade');
+    navigator.push({ component: ProposeTrade });
   })
   .catch( console.error.bind(console) );
 };
@@ -72,9 +68,10 @@ const SignIn = ({ navigator }) => (
       <InputLabel text='email' />
       <TextInput
         onChange={ captureInput }
-        style={ sharedStyles.input }
+        style={ styles.input }
       />
     </View>
+    <View style={ styles.divider } />
     <Text
       onPress={ submitEmail(navigator) }
       style={ [sharedStyles.blueButton, styles.blueButton] }
@@ -87,6 +84,17 @@ const styles = StyleSheet.create({
   blueButton: {
     backgroundColor: BLUE,
     color: 'white',
+  },
+  divider: {
+    borderColor: LIGHT_GREY,
+    borderWidth: .5,
+    marginBottom: 50,
+    width: 300,
+  },
+  input: {
+    height: 50,
+    marginBottom: -20,
+    width: 300,
   },
   space: {
     marginBottom: 20,
