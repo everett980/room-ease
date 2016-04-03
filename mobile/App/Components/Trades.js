@@ -74,7 +74,7 @@ const Trades = React.createClass({
     })
 
     return (
-      <View>
+      <View style={ sharedStyles.longHack }>
         <Header title='My Trades' />
         { trades }
       </View>

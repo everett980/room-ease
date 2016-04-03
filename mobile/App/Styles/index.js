@@ -57,7 +57,7 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
   longHack: {
-    height: 1000,
+    height: 1000, // so hacky so naughty
   },
   greenButton: createButtonStyle(GREEN),
   row: {

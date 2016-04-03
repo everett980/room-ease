@@ -8,6 +8,9 @@ export default (state = initialState, action) => {
     case 'SET_MEMBERS': {
       return { ...state, members: action.members }
     }
+    case 'SET_RENT_DUE_DATE': {
+      return { ...state, rentDueDate: action.rentDueDate }
+    }
     case 'SET_USER': {
       return { ...state, user: action.user }
     }

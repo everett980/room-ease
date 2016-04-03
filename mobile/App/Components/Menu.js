@@ -11,6 +11,7 @@ import SideMenu from 'react-native-side-menu';
 import { connect } from 'react-redux';
 
 import Firebase from 'firebase';
+import moment from 'moment';
 import ReactFireMixin from 'reactfire';
 
 import Tasks from './Tasks';
@@ -26,7 +27,7 @@ import {
   SLIGHTLY_DARKER_BLUE
 } from '../Styles/colors';
 
-const MENU_WIDTH = 280;
+const MENU_WIDTH = 300;
 
 const mapStateToProp = (state) => ({
   name: state.user.name,
@@ -63,7 +64,7 @@ let MenuContents = React.createClass({
   },
 
   render: function() {
-    const { name, navigator, profilePicture, userId } = this.props;
+    const { name, navigator, profilePicture, userId, rent, rentDueDate } = this.props;
     const numTasks = this.state.tasks
     .filter( (task) => task )
     .filter( (task) => task.assignedTo === userId )
@@ -101,7 +102,10 @@ let MenuContents = React.createClass({
           <Image
             source={{ uri: profilePicture }}
             style={ styles.profilePicture } />
-          <Text style={ styles.name } >{ name }</Text>
+          <View style={ [sharedStyles.column, styles.profileInfoTextContainer] }>
+            <Text style={ styles.name } >{ name }</Text>
+            <Text style={ styles.rentInfo } >${ rent } DUE { moment(rentDueDate).format('M/D') }</Text>
+          </View>
         </View>
         <View style={ styles.menuItemsContainer } >
           { menuItems }
@@ -114,6 +118,8 @@ let MenuContents = React.createClass({
 const mapMenuContentStateToProps = (state) => ({
   name: state.user.name,
   profilePicture: state.user.profilePicture,
+  rent: state.user.rentOwedThisMonth,
+  rentDueDate: state.rentDueDate,
   roomId: state.roomId,
   userId: state.user.id,
 });
@@ -128,6 +134,7 @@ const Menu = ({ navigator, children, isMenuOpen }) => {
     <SideMenu
       isOpen={ isMenuOpen }
       menu={ menu }
+      openMenuOffset={ 300 }
     >
       { children }
     </SideMenu>
@@ -160,7 +167,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     letterSpacing: 1.5,
-    marginBottom: 10,
+    paddingBottom: 5,
     textAlign: 'center',
   },
   menuItem: {
@@ -181,8 +188,17 @@ const styles = StyleSheet.create({
     width: 50,
   },
   profileInfoContainer: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
     backgroundColor: DARK_BLUE,
+    flexDirection: 'row',
     padding: 20,
   },
+  profileInfoTextContainer: {
+    paddingLeft: 10,
+  },
+  rentInfo: {
+    color: 'white',
+    fontSize: 14,
+    letterSpacing: 4,
+  }
 })

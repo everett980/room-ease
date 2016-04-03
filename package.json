@@ -1,0 +1,20 @@
+{
+  "name": "room-ease",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "seed": "node browser/seed.js && node server/interpolateMe.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/everett980/room-ease.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/everett980/room-ease/issues"
+  },
+  "homepage": "https://github.com/everett980/room-ease#readme"
+}

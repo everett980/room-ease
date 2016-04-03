@@ -11,7 +11,7 @@ import Firebase from 'firebase';
 import IconHeader from './IconHeader';
 import InputLabel from './Common/InputLabel';
 import Overview from './Overview';
-import Trades from './Trades';
+import Tasks from './Tasks';
 
 import sharedStyles from '../Styles';
 import { BLUE } from '../Styles/colors';
@@ -51,12 +51,16 @@ const submitEmail = (navigator) => () => {
     store.dispatch({
       type: 'SET_MEMBERS',
       members: members,
-    })
+    });
+    store.dispatch({
+      type: 'SET_RENT_DUE_DATE',
+      rentDueDate: room.dueDate,
+    });
   })
   .then( () => {
     console.dir( store.getState() );
-    console.log('Going to Trades');
-    navigator.push({ component: Trades, showMenu: true });
+    console.log('Going to Tasks');
+    navigator.push({ component: Tasks, showMenu: true });
   })
   .catch( console.error.bind(console) );
 };

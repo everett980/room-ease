@@ -24,7 +24,7 @@ import {
   LIGHTER_GREY,
 } from '../Styles/colors';
 
-const Todos = React.createClass({
+const Tasks = React.createClass({
   mixins: [ReactFireMixin],
 
   componentWillMount: function() {
@@ -34,25 +34,25 @@ const Todos = React.createClass({
     this.bindAsArray(ref, 'tasks');
   },
 
-  toggleTask: function(id, wasCompleted) {
-    const updatedTasks = this.state.tasks.map( (task) => {
-      if (task.id !== id) return task;
-      return { ...task, completed: !task.completed }
-    });
-    return () => { this.firebaseRefs.tasks.set(updatedTasks) };
+  toggleTask: function(task) {
+    return () => {
+      console.log('toggling')
+      this.firebaseRefs.tasks.child(task.id).update({ completed: !task.completed })
+    };
   },
 
   render: function() {
     const { userId } = this.props;
     const tasks = this.state.tasks
+    .sort( (a, b) => a.endDate > b.endDate )
     .filter( (task) => task.assignedTo === userId )
-    .sort( (a, b) => Date.parse(a.endDate) > Date.parse(b.endDate) )
+    .sort( (a, b) => a.completed ? 1 : -1 )
     .map( (task, idx) => {
       const checkbox = (task.completed) ? 'checked' : 'unchecked';
       const imageUrl = '../Resources/unchecked@2x.png';
 
       return (
-        <View key={ task.id }>
+        <View key={ idx }>
           <View style={ [sharedStyles.container, sharedStyles.row, styles.taskSeperator] }>
 
             <View style={ styles.textFormatter }>
@@ -60,14 +60,15 @@ const Todos = React.createClass({
                 style={ styles.firstLetter }
               >{ task.name[0].toUpperCase() }</Text>
               <Text
-                onPress={ this.toggleTask(idx, task.completed) }
-                style={ styles.taskTitle }
+                onPress={ this.toggleTask(task) }
+                style={ (task.completed ) ? [styles.taskTitle, styles.completed] : styles.taskTitle }
               >{ task.name.toUpperCase() }</Text>
             </View>
 
             <View>
               <TouchableHighlight>
                 <Image
+                  onPress={ this.toggleTask(task) }
                   style={ styles.checkbox }
                   source={
                     task.completed
@@ -110,6 +111,11 @@ const styles = StyleSheet.create({
   checkbox: {
     height: 30,
     width: 30,
+  },
+  completed: {
+    textDecorationColor: 'black',
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
   },
   date: {
     fontSize: 13,
@@ -157,4 +163,4 @@ const mapStateToProps = (state) => ({
   userId: state.user.id,
 });
 
-export default connect(mapStateToProps)(Todos);
+export default connect(mapStateToProps)(Tasks);
