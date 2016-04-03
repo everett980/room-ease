@@ -113,37 +113,125 @@ const user0Room1Options = {
 }
 
 let user0NessieId;
+let user0NessieAccountId;
 let user1NessieId;
+let user1NessieAccountId;
 let user2NessieId;
+let user2NessieAccountId;
 let user0Room1NessieId;
+let user0Room1NessieAccountId;
 
 rp(user0Options)
 // Promise.resolve(user0Options)
 .then( res => {
 	const createdUser0 = JSON.parse(res);
 	user0NessieId = createdUser0.objectCreated._id
-	// user0NessieId = 'abc123'
+	const moneyAccountData = {
+		type: "Checking",
+		nickname: "Primary",
+		rewards: 0,
+		balance: 10000
+	}
+	const moneyAccountOptions = {
+		method: 'POST',
+		uri: `http://api.reimaginebanking.com/customers/${user0NessieId}/accounts`,
+		qs: {
+            key: '9452e06cf1728189ae08d283b1aecc2f'
+        },
+        body: JSON.stringify(moneyAccountData),
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+	}
+	return rp(moneyAccountOptions)
+}).then( res => {
+	res = JSON.parse(res);
+	user0NessieAccountId = res.objectCreated._id;
 	return rp(user1Options)
-	// return user0NessieId;
 })
 .then( res => {
 	const createdUser1 = JSON.parse(res);
 	user1NessieId = createdUser1.objectCreated._id
-	// user1NessieId = '321cba'
-	return rp(user2Options)
-	// return user1NessieId;
+	const moneyAccountData = {
+		type: "Checking",
+		nickname: "Primary",
+		rewards: 0,
+		balance: 10000
+	}
+	const moneyAccountOptions = {
+		method: 'POST',
+		uri: `http://api.reimaginebanking.com/customers/${user1NessieId}/accounts`,
+		qs: {
+            key: '9452e06cf1728189ae08d283b1aecc2f'
+        },
+        body: JSON.stringify(moneyAccountData),
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+	}
+	return rp(moneyAccountOptions)
+})
+.then( res => {
+	res = JSON.parse(res);
+	user1NessieAccountId = res.objectCreated._id;
+	return rp(user2Options);
 })
 .then( res => {
 	const createdUser2 = JSON.parse(res);
 	user2NessieId = createdUser2.objectCreated._id
-	// user2NessieId = 'blahblah'
+	const moneyAccountData = {
+		type: "Checking",
+		nickname: "Primary",
+		rewards: 0,
+		balance: 10000
+	}
+	const moneyAccountOptions = {
+		method: 'POST',
+		uri: `http://api.reimaginebanking.com/customers/${user2NessieId}/accounts`,
+		qs: {
+            key: '9452e06cf1728189ae08d283b1aecc2f'
+        },
+        body: JSON.stringify(moneyAccountData),
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+	}
+	return rp(moneyAccountOptions)
+})
+.then( res => {
+	res = JSON.parse(res);
+	user2NessieAccountId = res.objectCreated._id;
 	return rp(user0Room1Options)
-	return user2NessieId;
 })
 .then( res => {
 	const createdUser0Room1 = JSON.parse(res);
 	user0Room1NessieId = createdUser0Room1.objectCreated._id
-	// user0Room1NessieId = 'pleasework.jpg';
+	const moneyAccountData = {
+		type: "Checking",
+		nickname: "Primary",
+		rewards: 0,
+		balance: 10000
+	}
+	const moneyAccountOptions = {
+		method: 'POST',
+		uri: `http://api.reimaginebanking.com/customers/${user0Room1NessieId}/accounts`,
+		qs: {
+            key: '9452e06cf1728189ae08d283b1aecc2f'
+        },
+        body: JSON.stringify(moneyAccountData),
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+	}
+	return rp(moneyAccountOptions)	
+})
+.then( res => {
+	res = JSON.parse(res);
+	user0Room1NessieAccountId = res.objectCreated._id;
 	return insertIntoFirebase()
 })
 .then( () => {
@@ -168,7 +256,8 @@ function insertIntoFirebase(){
 					    baseRentOwed: 1000,
 					    rentOwedThisMonth: 1000,
 					    isAdmin: true,
-					    nessieId: user0NessieId
+					    nessieId: user0NessieId,
+					    nessieCheckingId: user0NessieAccountId
 				    },
 				    {
 					    id: 1,
@@ -178,7 +267,9 @@ function insertIntoFirebase(){
 					    baseRentOwed: 1000,
 					    rentOwedThisMonth: 1000,
 					    isAdmin: false,
-					    nessieId: user1NessieId
+					    nessieId: user1NessieId,
+					    nessieCheckingId: user1NessieAccountId
+
 				    },
 				    {
 					    id: 2,
@@ -188,7 +279,8 @@ function insertIntoFirebase(){
 					    baseRentOwed: 1000,
 					    rentOwedThisMonth: 1000,
 					    isAdmin: false,
-					    nessieId: user2NessieId
+					    nessieId: user2NessieId,
+					    nessieCheckingId: user2NessieAccountId
 				    }
 				],
 				monthlyTasks: [
@@ -210,6 +302,7 @@ function insertIntoFirebase(){
 				],
 			    proposedTrades: [
 			        {
+			        	id: 0,
 			            initiator: 0,
 			            recipient: 1,
 			            tasksForInitiator: [2], //tasks for initiator if the trade is accepted
@@ -243,7 +336,8 @@ function insertIntoFirebase(){
 					    baseRentOwed: 500,
 					    rentOwedThisMonth: 500,
 					    isAdmin: true,
-					    nessieId: user0Room1NessieId
+					    nessieId: user0Room1NessieId,
+					    nessieCheckingId: user0Room1NessieAccountId
 					},
 					{
 						id: 1,
