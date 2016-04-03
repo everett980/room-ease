@@ -18,13 +18,15 @@ class AddTask extends Component {
 		console.log(this.props.roomId);
 		helperfns.createATask(this.props.roomId, {frequency: +this.props.frequency, name: this.props.name});
 		this.props.reset();
-		this.props
+		this.props.close();
 	}
 	render() {
 		return (
 				<div>
-				<input type='text' onChange={::this.setName}/>
-				<input type='text' onChange={::this.setFrequency}/>
+				Name of new task: <input type='text' onChange={::this.setName}/>
+				<br/>
+				Number of occurences per month (as a number): <input type='text' onChange={::this.setFrequency}/>
+				<br/>
 				<button onClick={::this.submit}>Add Task</button>
 				</div>
 		)

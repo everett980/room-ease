@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import Helmet from 'react-helmet';
-import { MiniInfoBar, Trade } from 'components';
+import { MiniInfoBar, Trade, AddProposal } from 'components';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import Firebase from 'firebase';
 import { setEmail, setRoomId, setMemberId } from '../../redux/modules/userData';
+import { openModal, closeModal } from '../../redux/modules/modalCtrl';
+const Modal = require('react-modal');
 
 const firebaseRef = new Firebase('https://room-ease.firebaseio.com/');
 
@@ -42,6 +44,8 @@ class Proposals extends Component {
 				<h1>Proposals You've {this.viewingReceived ? 'Received' : 'Sent'}</h1>
 				<button onClick={::this.toggleViewingReceived}>View {this.viewingReceived ? 'Sent' : 'Received'} Proposals</button>
 				{outerList}
+				<button onClick={this.props.openModal}>Propose New Trade</button>
+				<Modal isOpen={this.props.open} onRequestClose={this.props.closeModal}><AddProposal roomId={this.props.userRoomId} initiatorId={this.props.userMemberId}/></Modal>
 				</div>
 			   )
 	}
@@ -50,11 +54,18 @@ function mapStateToProps(state) {
 	return {
 		userEmail: state.userData.userEmail,
 		userMemberId: state.userData.userMemberId,
-		userRoomId: state.userData.userRoomId
+		userRoomId: state.userData.userRoomId,
+		open: state.modalCtrl.open
 	}
 }
 function mapDispatchToProps(dispatch) {
 	return {
+		openModal: () => {
+			dispatch(openModal());
+		},
+		closeModal: () => {
+			dispatch(closeModal());
+		}
 	}
 }
 

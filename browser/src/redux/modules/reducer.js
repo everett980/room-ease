@@ -11,6 +11,7 @@ import widgets from './widgets';
 import userData from './userData';
 import modalCtrl from './modalCtrl';
 import addTask from './addTask';
+import propose from './propose';
 
 export default combineReducers({
   routing: routeReducer,
@@ -26,5 +27,6 @@ export default combineReducers({
   widgets,
   userData,
    modalCtrl,
-  addTask
+  addTask,
+  propose
 });
