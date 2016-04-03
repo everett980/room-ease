@@ -42,6 +42,7 @@ function interpolateTasks() {
             //today should be moment().format('MM/DD/YYYY')
             const today = moment().add({ months: 1 }).format('MM/DD/YYYY');
             if (today === dueDate) {
+                console.log('inside iffff')
                 const monthFromToday = new Date(moment().add({ months: 1 }).format('MM/DD/YYYY')).getTime();
                 const betterToday = new Date(moment().format('MM/DD/YYYY')).getTime();
                 const millis = monthFromToday - betterToday;
@@ -79,9 +80,6 @@ function interpolateTasks() {
                 })
                 transfersFrom.forEach( transferData => {
                 	console.log(transferData)
-                	// const options = {
-
-                	// }
                 })
             }
         })

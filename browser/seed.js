@@ -218,7 +218,8 @@ function insertIntoFirebase(){
 			        }
 			    ],
 			    communalPurchases: [
-			        {
+			        {	
+			        	id: 0,
 		    	        item: 'toilet paper',
 		    	        price: 5,
 		    	        contestors: [0],

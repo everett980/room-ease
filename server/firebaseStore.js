@@ -38,7 +38,6 @@ const functions = {
         return rp(options)
     },
     getARoomsMembers(roomIndex){
-    	console.log('being called')
     	return this.getARoom(roomIndex)
     	.then( room => {
     		room = JSON.parse(room);
@@ -115,15 +114,32 @@ const functions = {
     	this.getARoomsCommunalPurchases(roomIndex)
     	.then( communalPurchases => {
     		const purchase = {
+    			id: communalPurchases.length,
     			contestors: [],
     			date: itemDetails.date,
     			item: itemDetails.name,
     			price: itemDetails.price,
     			purchaser: itemDetails.purchaser
     		}
-    		console.log(purchase)
     		communalPurchases[communalPurchases.length] = purchase;
-    		console.log(communalPurchases)
+    		const communalPurchasesFirebaseRef = new Firebase(`https://room-ease.firebaseio.com/rooms/${roomIndex}/communalPurchases`);
+    		return communalPurchasesFirebaseRef.set(communalPurchases)
+    	})
+    },
+    deleteCommunalPurchase(roomIndex, purchaseId){
+    	const communalPurchaseFirebaseRef = new Firebase(`https://room-ease.firebaseio.com/rooms/${roomIndex}/communalPurchases/${purchaseId}`);
+    	return communalPurchaseFirebaseRef.remove()
+    },
+    contestAPurchase(roomIndex, purchaseId, contestorId){
+    	this.getARoomsCommunalPurchases(roomIndex)
+    	.then( communalPurchases => {
+    		const communalPurchase = communalPurchases[purchaseId];
+    		if(communalPurchase.contestors){
+    			communalPurchase.contestors.push(contestorId)
+    		} else {
+    			communalPurchase.contestors = [contestorId]
+    		}
+    		communalPurchases[purchaseId] = communalPurchase;
     		const communalPurchasesFirebaseRef = new Firebase(`https://room-ease.firebaseio.com/rooms/${roomIndex}/communalPurchases`);
     		return communalPurchasesFirebaseRef.set(communalPurchases)
     	})
@@ -180,10 +196,13 @@ const functions = {
     }
 }
 
+
+// functions.deleteCommunalPurchase(0, 0)
 // functions.createATradeProposal(0, 0, 1, [], [2], 2);
 
 // functions.acceptATrade(0, 1)
 // itemDetails <-- name, price, id of purchaser, date
+// functions.contestAPurchase(0, 1, 1)
 // const item = {
 // 	date: moment().subtract({days:2}).toString(),
 //     name: 'Windex',
