@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import Helmet from 'react-helmet';
-import { MiniInfoBar, TaskDeleter } from 'components';
+import { MiniInfoBar, TaskDeleter, AddTask } from 'components';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import Firebase from 'firebase';
 import { setEmail, setRoomId, setMemberId } from '../../redux/modules/userData';
+import { openModal, closeModal } from '../../redux/modules/modalCtrl';
+const Modal = require('react-modal');
 
 const firebaseRef = new Firebase('https://room-ease.firebaseio.com/');
 
@@ -17,7 +19,7 @@ class ManageTasks extends Component {
 	}
 	makeList() {
 		console.log(this.monthlyTasks);
-		outerList = this.monthlyTasks.map((task) => <TaskDeleter task={task}/>);
+		outerList = this.monthlyTasks.filter(task => task).map((task) => <TaskDeleter task={task} roomId={this.props.userRoomId}/>);
 		this.forceUpdate();
 	}
 	render() {
@@ -25,7 +27,8 @@ class ManageTasks extends Component {
 				<div>
 				<h1>Manage Tasks</h1>
 				{outerList}
-				<button style={ {clear: 'both'} }>Add +</button>
+				<button style={ {clear: 'both'} } onClick={this.props.openModal}>Add +</button>
+				<Modal isOpen={this.props.open} onRequestClose={this.props.closeModal}><AddTask/></Modal>
 				</div>
 			   );
 	}
@@ -34,11 +37,18 @@ function mapStateToProps(state) {
 	return {
 		userEmail: state.userData.userEmail,
 		userMemberId: state.userData.userMemberId,
-		userRoomId: state.userData.userRoomId
+		userRoomId: state.userData.userRoomId,
+		open: state.modalCtrl.open
 	}
 }
 function mapDispatchToProps(dispatch) {
 	return {
+		openModal: () => {
+					   dispatch(openModal());
+		},
+		closeModal: () => {
+						dispatch(closeModal());
+					}
 	}
 }
 

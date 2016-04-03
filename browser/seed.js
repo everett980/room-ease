@@ -318,7 +318,7 @@ function insertIntoFirebase(){
 			            rentIncreaseForInitiator: -3 //money will be added to initiator's rent due and subtracted from recipient's 
 			        },
 			        {
-			        	id: 1,
+			        	id: 2,
 			            initiator: 1,
 			            recipient: 0,
 			            tasksForInitiator: [3], //tasks for initiator if the trade is accepted

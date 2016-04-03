@@ -29,7 +29,7 @@ class Proposals extends Component {
 		const displayTrades = this.viewingReceived ? this.offersForUser : this.yourPendingOffers;
 		console.log(this.members);
 		console.log(this.tasks);
-		outerList = displayTrades.map(trade => <Trade trade={trade} members={this.members} tasks={this.tasks} viewerIsSender={!this.viewingReceived}/>);
+		outerList = displayTrades.map(trade => <Trade trade={trade} members={this.members} tasks={this.tasks} viewerIsSender={!this.viewingReceived} roomId={this.props.userRoomId}/>);
 		this.forceUpdate();
 	}
 	toggleViewingReceived() {

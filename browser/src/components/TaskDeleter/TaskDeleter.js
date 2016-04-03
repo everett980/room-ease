@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+const helperfns = require('../../firebaseStore2.js');
 
 export default class TaskDeleter extends Component {
 	deleteMe() {
 		console.log('will use the following id to delete in the future: ', this.props.task.id);
+		helperfns.deleteATask(this.props.roomId, this.props.task.id);
 	}
 	render() {
 		return (

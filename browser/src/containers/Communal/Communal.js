@@ -22,7 +22,7 @@ class Communal extends Component {
 	}
 	makeList() {
 		console.log(this.communalPurchases);
-		outerList = this.communalPurchases.filter((purchase) => purchase).map((purchase) => <Purchase purchase={purchase} members={this.members} mine={this.props.userMemberId === purchase.purchaser}/>);
+		outerList = this.communalPurchases.filter((purchase) => purchase).map((purchase) => <Purchase purchase={purchase} members={this.members} mine={this.props.userMemberId === purchase.purchaser} contestorId={this.props.userMemberId} roomIndex={this.props.userRoomId}/>);
 		this.forceUpdate();
 	}
 	render() {
