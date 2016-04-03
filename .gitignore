@@ -6,5 +6,6 @@ browser/*.iml
 browser/webpack-assets.json
 browser/webpack-stats.json
 browser/npm-debug.log
+server/node_modules
 **.swp
 **~

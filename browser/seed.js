@@ -308,7 +308,24 @@ function insertIntoFirebase(){
 			            tasksForInitiator: [2], //tasks for initiator if the trade is accepted
 			            tasksForRecipient: [0], //tasks for recipient if the trade is accepted
 			            rentIncreaseForInitiator: 8 //money will be added to initiator's rent due and subtracted from recipient's 
+			        },
+			        {
+			        	id: 1,
+			            initiator: 2,
+			            recipient: 0,
+			            tasksForInitiator: [4], //tasks for initiator if the trade is accepted
+			            tasksForRecipient: [1], //tasks for recipient if the trade is accepted
+			            rentIncreaseForInitiator: -3 //money will be added to initiator's rent due and subtracted from recipient's 
+			        },
+			        {
+			        	id: 1,
+			            initiator: 1,
+			            recipient: 0,
+			            tasksForInitiator: [3], //tasks for initiator if the trade is accepted
+			            tasksForRecipient: [5], //tasks for recipient if the trade is accepted
+			            rentIncreaseForInitiator: 9 //money will be added to initiator's rent due and subtracted from recipient's 
 			        }
+
 			    ],
 			    communalPurchases: [
 			        {	
