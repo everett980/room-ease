@@ -17,6 +17,7 @@ import ReactFireMixin from 'reactfire';
 import Tasks from './Tasks';
 import Trades from './Trades';
 import Overview from './Overview';
+import ProposeTrade from './ProposeTrade';
 
 import store from '../Data';
 import sharedStyles from '../Styles';
@@ -38,7 +39,7 @@ const go = (navigator, location) => () => {
   const locationToComponent = {
     'My Trades': Trades,
     'My Tasks': Tasks,
-    'Make New Trade': Overview,
+    'Make New Trade': ProposeTrade,
   }
   const component = locationToComponent[location];
 

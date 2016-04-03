@@ -55,8 +55,8 @@ const submitEmail = (navigator) => () => {
   })
   .then( () => {
     console.dir( store.getState() );
-    console.log('Going to ProposeTrade');
-    navigator.push({ component: ProposeTrade });
+    console.log('Going to Tasks');
+    navigator.push({ component: Tasks });
   })
   .catch( console.error.bind(console) );
 };
