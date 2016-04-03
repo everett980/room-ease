@@ -1,3 +1,57 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { setTaskName, setTaskFrequency, reset } from '../../redux/modules/addTask';
+import { setName, setFrequency, reset } from '../../redux/modules/AddTask';
+import { closeModal } from '../../redux/modules/modalCtrl';
+
+const helperfns = require('../../firebaseStore2.js');
+
+class AddTask extends Component {
+	setName(e) {
+		console.log(e.target.value);
+		this.props.setName(e.target.value);
+	}
+	setFrequency(e) {
+		console.log(e.target.value);
+		this.props.setFrequency(e.target.value);
+	}
+	submit() {
+		console.log(this.props.roomId);
+		helperfns.createATask(this.props.roomId, {frequency: +this.props.frequency, name: this.props.name});
+		this.props.reset();
+		this.props.close();
+	}
+	render() {
+		return (
+				<div>
+				Name of new task: <input type='text' onChange={::this.setName}/>
+				<br/>
+				Number of occurences per month (as a number): <input type='text' onChange={::this.setFrequency}/>
+				<br/>
+				<button onClick={::this.submit}>Add Task</button>
+				</div>
+		)
+	}
+}
+function mapStateToProps(state) {
+	return {
+		name: state.addTask.name,
+		frequency: state.addTask.frequency
+	}
+}
+function mapDispatchToProps(dispatch) {
+	return {
+		setName: (name) => {
+					 dispatch(setName(name));
+			},
+		setFrequency: (frequency) => {
+						  dispatch(setFrequency(frequency));
+			},
+		reset: () => {
+				   dispatch(reset());
+				  },
+		close: () => {
+				   dispatch(closeModal());
+				 }
+	}
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AddTask);

@@ -15,3 +15,5 @@ export Task from './Task/Task';
 export TaskDeleter from './TaskDeleter/TaskDeleter';
 export Purchase from './Purchase/Purchase';
 export Trade from './Trade/Trade';
+export AddTask from './AddTask/AddTask';
+export AddProposal from './AddProposal/AddProposal';
