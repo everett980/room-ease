@@ -28,7 +28,7 @@ class ManageTasks extends Component {
 				<h1>Manage Tasks</h1>
 				{outerList}
 				<button style={ {clear: 'both'} } onClick={this.props.openModal}>Add +</button>
-				<Modal isOpen={this.props.open} onRequestClose={this.props.closeModal}><AddTask/></Modal>
+				<Modal isOpen={this.props.open} onRequestClose={this.props.closeModal}><AddTask roomId={this.props.userRoomId}/></Modal>
 				</div>
 			   );
 	}
