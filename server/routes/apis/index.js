@@ -5,7 +5,7 @@ const rp = require('request-promise');
 module.exports = router;
 
 router.post('/createNessieAccount', (req, res) => {
-	console.log(req.body)
+	console.log('req.body')
 	if(!req.body.name){
 		res.status(400).send({error: 'Your name is not valid.'})
 		return;

@@ -117,33 +117,33 @@ let user1NessieId;
 let user2NessieId;
 let user0Room1NessieId;
 
-// rp(user0Options)
-Promise.resolve(user0Options)
+rp(user0Options)
+// Promise.resolve(user0Options)
 .then( res => {
-	// const createdUser0 = JSON.parse(res);
-	// user0NessieId = createdUser0.objectCreated._id
-	user0NessieId = 'abc123'
-	// return rp(user1Options)
-	return user0NessieId;
+	const createdUser0 = JSON.parse(res);
+	user0NessieId = createdUser0.objectCreated._id
+	// user0NessieId = 'abc123'
+	return rp(user1Options)
+	// return user0NessieId;
 })
 .then( res => {
-	// const createdUser1 = JSON.parse(res);
-	// user1NessieId = createdUser1.objectCreated._id
-	user1NessieId = '321cba'
-	// return rp(user2Options)
-	return user1NessieId;
+	const createdUser1 = JSON.parse(res);
+	user1NessieId = createdUser1.objectCreated._id
+	// user1NessieId = '321cba'
+	return rp(user2Options)
+	// return user1NessieId;
 })
 .then( res => {
-	// const createdUser2 = JSON.parse(res);
-	// user2NessieId = createdUser2.objectCreated._id
-	user2NessieId = 'blahblah'
-	// return rp(user0Room1Options)
+	const createdUser2 = JSON.parse(res);
+	user2NessieId = createdUser2.objectCreated._id
+	// user2NessieId = 'blahblah'
+	return rp(user0Room1Options)
 	return user2NessieId;
 })
 .then( res => {
-	// const createdUser0Room1 = JSON.parse(res);
-	// user0Room1NessieId = createdUser0Room1.objectCreated._id
-	user0Room1NessieId = 'pleasework.jpg';
+	const createdUser0Room1 = JSON.parse(res);
+	user0Room1NessieId = createdUser0Room1.objectCreated._id
+	// user0Room1NessieId = 'pleasework.jpg';
 	return insertIntoFirebase()
 })
 .then( () => {
@@ -208,36 +208,13 @@ function insertIntoFirebase(){
 				        frequency: 2 //in number of times/month 
 				    }
 				],
-				thisMonthsTasks: [
-				    {
-			            id: 0,
-			            name: 'Take out the trash',
-			            startDate: moment().toString(),
-			            dueDate: moment().add({days: 7}).toString(),
-			            assignedTo: 0
-			        },
-			        {
-			            id: 1,
-			            name: 'Do the dishes',
-		                startDate: moment().toString(),
-			            dueDate: moment().add({days: 30/8}).toString(),
-			            assignedTo: 2
-			        },
-			        {
-			            id: 2,
-			            name: 'Clean Yustynn',
-		                startDate: moment().toString(),
-			            dueDate: moment().add({days: 30/2}).toString(),
-			            assignedTo: 1
-			        }
-			    ],
 			    proposedTrades: [
 			        {
-			            requester: 0,
-			            responder: 1,
-			            tasksForRequester: [2],
-			            tasksForResponder: [0],
-			            moneyForRequester: 8
+			            initiator: 0,
+			            recipient: 1,
+			            tasksForInitiator: [2], //tasks for initiator if the trade is accepted
+			            tasksForRecipient: [0], //tasks for recipient if the trade is accepted
+			            rentIncreaseForInitiator: 8 //money will be added to initiator's rent due and subtracted from recipient's 
 			        }
 			    ],
 			    communalPurchases: [
@@ -286,22 +263,6 @@ function insertIntoFirebase(){
 				        name: 'Do the dishes',
 				        frequency: 4 //in number of times/month 
 				    }
-				],
-				thisMonthsTasks: [
-					{
-			            id: 0,
-			            name: 'Take out the trash',
-			            startDate: moment().toString(),
-			            dueDate: moment().add({days: 7}).toString(),
-			            assignedTo: 0
-			        },
-			        {
-			            id: 1,
-			            name: 'Do the dishes',
-			            startDate: moment().toString(),
-			            dueDate: moment().add({days: 7}).toString(),
-			            assignedTo: 1
-			        },
 				],
 				proposedTrades: [],
 				communalPurchases: [],

@@ -1,4 +1,3 @@
-<<<<<<< HEAD:server/server.js
 'use strict'
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -11,6 +10,10 @@ const firebaseRef = new Firebase('https://room-ease.firebaseio.com/');
 const rp = require('request-promise');
 const moment = require('moment');
 const _ = require('lodash');
+
+app.listen(PORT, ()=> {
+    console.log('listening diligently on port '+PORT)
+})
 
 module.exports = app; // this line is only used to make testing easier.
 
@@ -49,6 +52,7 @@ function interpolateTasks() {
                     const interval = millis / task.frequency;
                     for (let i = 0; i < task.frequency; i++) {
                         generatedTaskList.push({
+                            roomId: room.roomId,
                             id: generatedTaskList.length,
                             name: task.name,
                             startDate: new Date(betterToday + (i * interval)),
