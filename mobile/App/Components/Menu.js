@@ -4,11 +4,14 @@ import React, {
   StyleSheet,
   Text,
   View,
+  createElement
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import MenuWrapper from 'react-native-side-menu';
+import store from '../Data';
+import SideMenu from 'react-native-side-menu';
 
+import Tasks from './Tasks';
 import Overview from './Overview';
 
 import sharedStyles from '../Styles';
@@ -29,11 +32,13 @@ const go = (navigator, location) => () => {
   const locationToComponent = {
     'Home': Overview,
     'My Trades': Overview,
-    'My Tasks': Overview,
-    'Communal Tasks': Overview,
+    'My Tasks': Tasks,
+    'Communal Trades': Overview,
     'Make New Trade': Overview,
   }
   const component = locationToComponent[location];
+
+  store.dispatch({ type: 'TOGGLE_MENU' });
 
   navigator.push({ component });
 }
@@ -50,16 +55,23 @@ let MenuContents = ({ name, navigator, profilePicture }) => {
 
   const menuItems = locations.map( (location) => (
       <View key={ location }>
-        <Text onPress={ go(navigator, location) } style={ styles.menuItem }>{ location.toUpperCase() }</Text>
+        <Text
+          onPress={ go(navigator, location) }
+          style={ styles.menuItem }
+        >
+          { location.toUpperCase() }
+        </Text>
         <View style={ styles.divider } />
       </View>
   ));
 
   return (
-    <View style={ styles.container } >
+    <View style={ [styles.container,]} >
       <View style={ styles.profileInfoContainer }>
-        <Image style={ styles.profilePicture }source={{ uri: profilePicture }} />
-        <Text style={ styles.name }>{ name }</Text>
+        <Image
+          source={{ uri: profilePicture }}
+          style={ styles.profilePicture } />
+        <Text style={ styles.name } >{ name }</Text>
       </View>
       <View style={ styles.menuItemsContainer } >
         { menuItems }
@@ -68,13 +80,28 @@ let MenuContents = ({ name, navigator, profilePicture }) => {
   );
 }
 
-const mapStateToProps = (state) => ({
+const mapMenuContentStateToProps = (state) => ({
   name: state.user.name,
   profilePicture: state.user.profilePicture,
 });
 
-MenuContents = connect(mapStateToProps, null)(MenuContents);
+MenuContents = connect(mapMenuContentStateToProps)(MenuContents);
 
+const mapMenuStateToProps = (state) => ({ isMenuOpen: state.isMenuOpen });
+
+const Menu = ({ navigator, children, isMenuOpen }) => {
+  const menu = <MenuContents navigator={navigator} />
+  return (
+    <SideMenu
+      isOpen={ isMenuOpen }
+      menu={ menu }
+    >
+      { children }
+    </SideMenu>
+  )
+}
+
+export default connect(mapMenuStateToProps)(Menu);
 
 const styles = StyleSheet.create({
   container: {
@@ -103,6 +130,7 @@ const styles = StyleSheet.create({
   },
   menuItemsContainer: {
     backgroundColor: BLUE,
+    height: 1000, // so hacky so naughty
   },
   profilePicture: {
     borderRadius: 25,
@@ -116,5 +144,3 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 })
-
-export default MenuContents;

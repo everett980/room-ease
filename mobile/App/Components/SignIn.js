@@ -11,6 +11,7 @@ import Firebase from 'firebase';
 import IconHeader from './IconHeader';
 import InputLabel from './Common/InputLabel';
 import Overview from './Overview';
+import Tasks from './Tasks';
 
 import sharedStyles from '../Styles';
 import store from '../Data';
@@ -45,8 +46,8 @@ const submitEmail = (navigator) => () => {
   .then( console.dir.bind(console) )
   .then( () => {
     console.dir( store.getState() );
-    console.log('Going to Overview');
-    navigator.push({ component: Overview });
+    console.log('Going to Tasks');
+    navigator.push({ component: Tasks, showMenu: true });
   })
   .catch( console.error.bind(console) );
 };
