@@ -13,7 +13,9 @@ import { connect } from 'react-redux';
 import ReactFireMixin from 'reactfire';
 
 import Header from './Header';
+import Tasks from './Tasks';
 
+import store from '../Data';
 import sharedStyles from '../Styles';
 import {
   BLUE,
@@ -68,32 +70,86 @@ const Trade = React.createClass({
   mixins: [ReactFireMixin],
 
   componentWillMount: function() {
-    const { roomId, tradeId } = this.props;
+    const { roomId, tradeId, user } = this.props;
+
+    const membersRef = new Firebase(`https://room-ease.firebaseio.com/rooms/${roomId}/members`)
     const tasksRef = new Firebase(`https://room-ease.firebaseio.com/rooms/${roomId}/thisMonthsTasks`);
     const tradeRef = new Firebase(`https://room-ease.firebaseio.com/rooms/${roomId}/proposedTrades/${tradeId}`)
+    console.log('user', user)
 
+    membersRef.on('value', (snapshot) => {
+      const members = snapshot.val();
+      const newUser = members.find( (member) => member.id === user.id )
+
+      store.dispatch({
+        type: 'SET_MEMBERS',
+        members,
+      });
+      store.dispatch({
+        type: 'SET_USER',
+        user: newUser,
+      });
+    });
+
+    this.bindAsArray(membersRef, 'members');
     this.bindAsArray(tasksRef, 'tasks');
     this.bindAsObject(tradeRef, 'trade');
 
   },
 
-  render: function() {
-    const { members, user } = this.props;
-    const { trade } = this.state;
+  accept: function(tasksForInitator, tasksForRecipient, rentIncreaseForInitiator, initiator ) {
+    return () => {
+      const { user } = this.props;
 
-    const initiator = members[trade.initiator];
+      console.log(user, 'user')
+
+      const fb = this.firebaseRefs;
+      fb.members.child(`${ user.id }`).update({ rentOwedThisMonth: user.rentOwedThisMonth - rentIncreaseForInitiator})
+      .then( () => {
+        fb.members.child(`${ initiator.id }`).update({ rentOwedThisMonth: initiator.rentOwedThisMonth + rentIncreaseForInitiator})
+      } );
+
+      tasksForInitator.forEach( (task) => {
+        console.log(`Updating task ${ task.id } to go to ${ initiator.id }`);
+        fb.tasks.child(`${ task.id }`).update({ assignedTo: initiator.id })
+      } );
+      tasksForRecipient.forEach( (task) => {
+        console.log(`Updating task ${ task.id } to go to ${ user.id }`);
+        fb.tasks.child(`${ task.id }`).update({ assignedTo: user.id })
+      } )
+
+      fb.trade.set(null);
+      this.props.navigator.push({ component: Tasks });
+    }
+  },
+
+  reject: function() {
+    return () => {
+      this.firebaseRefs.trade.set(null);
+      this.props.navigator.push({ component: Tasks });
+    }
+  },
+
+  render: function() {
+    const { user } = this.props;
+    const { members, trade } = this.state;
+    console.log(trade, members, trade.initiator);
+    console.log(this.state)
+
+    const initiator = members.find( (member) => member.id === trade.initiator );
+    if (!initiator) return <View />
     initiator.firstName = initiator.name.split(' ')[0]
 
-    const tasks = this.state.tasks.filter( (task) => task );
+    const tasks = this.state.tasks.filter( (task) => task !== null && task !== undefined );
 
     trade.tasksForInitator = trade.tasksForInitiator
-    .filter( (task) => task )
+    .filter( (id) => id !== null )
     .map( (id) => (
       tasks.find( (task) => task.id === id )
     ) );
 
     trade.tasksForRecipient = trade.tasksForRecipient
-    .filter( (task) => task )
+    .filter( (id) => id )
     .map( (id) => (
       tasks.find( (task) => task.id === id )
     ) );
@@ -119,15 +175,17 @@ const Trade = React.createClass({
           tasksTaken={ tasksForRecipient }
           title={ `${initiator.firstName} gets` }
         />
-        <View style={ sharedStyles.row }>
-          <View style={ [sharedStyles.full, sharedStyles.row] }>
+        <View style={ sharedStyles.row, sharedStyles.full }>
+          <View style={ [sharedStyles.full, sharedStyles.row, styles.stretch] }>
             <Text
+              onPress={ this.reject(tasksForRecipient, tasksForInitator, rentIncreaseForInitiator) }
               style={ [styles.button, styles.red ]}>
-              NO
+              REJECT
             </Text>
             <Text
+              onPress={ this.accept(tasksForRecipient, tasksForInitator, rentIncreaseForInitiator, initiator) }
               style={ [styles.button, styles.green ]} >
-              YES
+              ACCEPT
             </Text>
           </View>
         </View>
@@ -137,8 +195,8 @@ const Trade = React.createClass({
 })
 
 const mapStateToProps = (state) => ({
-  members: state.members,
   roomId: state.roomId,
+  user: state.user,
   user: state.user,
 })
 
@@ -152,6 +210,13 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   button: {
+    color: 'white',
+    flex: 1,
+    fontSize: 28,
+    fontWeight: '400',
+    letterSpacing: 5,
+    paddingTop: 25,
+    textAlign: 'center',
   },
   green: {
     backgroundColor: GREEN,
@@ -164,6 +229,11 @@ const styles = StyleSheet.create({
   },
   red: {
     backgroundColor: RED,
+  },
+  stretch: {
+    alignSelf: 'stretch',
+    flex: 1,
+    justifyContent: 'center',
   },
   title: {
     color: GREY,
