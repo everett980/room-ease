@@ -20,6 +20,9 @@ const createButtonStyle = (color) => ({
 });
 
 export default StyleSheet.create({
+  alignCenter: {
+    alignItems: 'center',
+  },
   blueButton: createButtonStyle(BLUE),
   center: {
     alignItems: 'center',
@@ -34,7 +37,7 @@ export default StyleSheet.create({
   container: {
     padding: 20,
   },
-  fullWidth: {
+  full: {
     flex: 1,
   },
   h1: {
@@ -52,6 +55,9 @@ export default StyleSheet.create({
   },
   logo: {
     marginBottom: 20,
+  },
+  longHack: {
+    height: 1000,
   },
   greenButton: createButtonStyle(GREEN),
   row: {

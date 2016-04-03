@@ -5,6 +5,9 @@ export default (state = initialState, action) => {
     case 'SET_ROOM_ID': {
       return { ...state, roomId: action.roomId }
     }
+    case 'SET_MEMBERS': {
+      return { ...state, members: action.members }
+    }
     case 'SET_USER': {
       return { ...state, user: action.user }
     }

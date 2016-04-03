@@ -32,7 +32,7 @@ const renderScene = (scene, navigator) => {
 
   return (
     <Provider store={ store }>
-      <View style={ [sharedStyles.fullWidth, styles.container] }>
+      <View style={ [sharedStyles.full, styles.container] }>
         { rendered }
       </View>
     </Provider>

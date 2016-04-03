@@ -10,23 +10,26 @@ import { connect } from 'react-redux';
 import { store } from '../Data';
 
 import sharedStyles from '../Styles';
-import { GREY } from '../Styles/colors';
+import { DARK_GREY, GREY, LIGHT_GREY } from '../Styles/colors';
 
 const pressUps = () => { console.log('OI'); store.dispatch({ type: 'TOGGLE_MENU' }) };
 
 let Header = ({ title, toggleMenu }) => (
-  <View style={ [sharedStyles.container, styles.container] }>
-    <TouchableHighlight
-      onPress={ toggleMenu }
-      style={ [styles.menuIconContainer] }
-      underlayColor='transparent' >
-      <Image
-        source={ require('../Resources/menu-icon.png') }
-      />
-    </TouchableHighlight>
-    <View style={ styles.leftAlign }>
-      <Text style={ styles.title } >{ title }</Text>
+  <View>
+    <View style={ [sharedStyles.container, styles.container] }>
+      <TouchableHighlight
+        onPress={ toggleMenu }
+        style={ [styles.menuIconContainer] }
+        underlayColor='transparent' >
+        <Image
+          source={ require('../Resources/menu-icon.png') }
+        />
+      </TouchableHighlight>
+      <View style={ styles.leftAlign }>
+        <Text style={ styles.title } >{ title }</Text>
+      </View>
     </View>
+    <View style={ styles.divider } />
   </View>
 );
 
@@ -44,6 +47,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  divider: {
+    alignSelf: 'stretch',
+    borderColor: LIGHT_GREY,
+    borderWidth: .5,
+    flex: 1,
+  },
   leftAlign: {
     alignItems: 'center',
     paddingRight: 40,
@@ -54,7 +63,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   title: {
-    color: GREY,
+    color: DARK_GREY,
     fontSize: 22,
     letterSpacing: 0.5,
     paddingLeft: 10,
