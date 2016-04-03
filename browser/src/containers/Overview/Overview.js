@@ -23,33 +23,26 @@ class Overview extends Component {
 	});
 	}
 	togglePersonal() {
-		console.log('before', this.personal);
 		this.personal = !this.personal;
-		console.log('after', this.personal);
 		this.makeList();
 	}
 
 	makeList() {
-		console.log(this.props.userMemberId);
 		outerList = this.tasks.filter((task) => task)
 			.filter((task) => {return ((task.assignedTo === this.props.userMemberId) === this.personal)})
 			.filter((task) => {
 				return ((Date.parse(task.startDate) < new Date().getTime()) && (Date.parse(task.endDate) > new Date().getTime()));
 			})
 			.map((task) => <Task task={task} members={this.members} mine={this.personal}/>);
-		console.log(outerList);
-		console.log('making list');
-		outerList = outerList;
 		this.forceUpdate();
-		console.log(Date.parse(this.tasks[0].startDate));
 	}
 	render() {
-		console.log(outerList);
 		return (
 				<div>
 				<h1>{this.personal ? 'Your Tasks' : 'Other\'s Task'}</h1>
 				<button onClick={::this.togglePersonal}>{this.personal ? 'View Other\'s Tasks' : 'View Your Tasks'}</button>
 				{outerList}
+				<button>Propose Trade</button>
 				</div>
 			   );
 	}

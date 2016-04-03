@@ -13,6 +13,9 @@ import {
     NotFound,
 	Overview,
 	Signup,
+	ManageTasks,
+	Communal,
+	Proposals
   } from 'containers';
 
 export default (store) => {
@@ -40,7 +43,10 @@ export default (store) => {
     <Route path="/" component={App}>
       { /* Home (main) route */ }
       <IndexRoute component={Signup}/>
-      <Route path="/overview" component={Overview}/>
+      <Route path="overview" component={Overview}/>
+      <Route path="managetasks" component={ManageTasks}/>
+      <Route path="communal" component={Communal}/>
+      <Route path="proposals" component={Proposals}/>
 
 
       { /* Catch all route */ }

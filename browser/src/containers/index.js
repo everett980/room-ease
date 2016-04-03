@@ -9,3 +9,6 @@ export Survey from './Survey/Survey';
 export NotFound from './NotFound/NotFound';
 export Overview from './Overview/Overview';
 export Signup from './Signup/Signup';
+export Communal from './Communal/Communal';
+export ManageTasks from './ManageTasks/ManageTasks';
+export Proposals from './Proposals/Proposals';
