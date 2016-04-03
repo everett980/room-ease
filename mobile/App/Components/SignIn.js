@@ -11,8 +11,10 @@ import Firebase from 'firebase';
 import IconHeader from './IconHeader';
 import InputLabel from './Common/InputLabel';
 import Overview from './Overview';
+import Trades from './Trades';
 
 import sharedStyles from '../Styles';
+import { BLUE } from '../Styles/colors';
 import store from '../Data';
 
 let email = 'yustynn@gmail.com';
@@ -37,22 +39,30 @@ const submitEmail = (navigator) => () => {
   .then( (room) => {
     console.log(1, email);
     const user = room.members.find( (member) => member.email === email );
+
+    const members = room.members.reduce( (members, member) => {
+      members[member.id] = member;
+      return members;
+    }, {});
     store.dispatch({
       type: 'SET_USER',
       user,
+    });
+    store.dispatch({
+      type: 'SET_MEMBERS',
+      members: members,
     })
   })
-  .then( console.dir.bind(console) )
   .then( () => {
     console.dir( store.getState() );
-    console.log('Going to Overview');
-    navigator.push({ component: Overview });
+    console.log('Going to Trades');
+    navigator.push({ component: Trades, showMenu: true });
   })
   .catch( console.error.bind(console) );
 };
 
 const SignIn = ({ navigator }) => (
-  <View style={ [sharedStyles.fullWidth, sharedStyles.center] }>
+  <View style={ [sharedStyles.full, sharedStyles.center] }>
     <IconHeader title='Welcome to RoomEase.'/>
     <View style={ styles.space }>
       <InputLabel text='email' />
@@ -63,13 +73,17 @@ const SignIn = ({ navigator }) => (
     </View>
     <Text
       onPress={ submitEmail(navigator) }
-      style={ [sharedStyles.blueButton] }
+      style={ [sharedStyles.blueButton, styles.blueButton] }
     >
       SIGN IN WITH GOOGLE</Text>
   </View>
 )
 
 const styles = StyleSheet.create({
+  blueButton: {
+    backgroundColor: BLUE,
+    color: 'white',
+  },
   space: {
     marginBottom: 20,
   }
